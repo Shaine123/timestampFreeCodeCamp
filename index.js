@@ -19,10 +19,53 @@ app.get("/", function (req, res) {
 });
 
 
-// your first API endpoint... 
-app.get("/api/hello", function (req, res) {
-  res.json({greeting: 'hello API'});
+
+app.get("/api", function (req, res) {
+  const {dates} = req.params
+  const days = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"]
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  let obj = new Date()
+  
+  
+  res.json({
+     unix: obj.getTime(),
+     utc: obj.getTime()
+  })
 });
+
+
+// your first API endpoint... 
+app.get("/api/:dates?", function (req, res) {
+    const {dates} = req.params
+    let obj = ''
+     
+
+    if(isNaN(dates)){
+      if(new Date(dates.toString()).toString() === 'Invalid Date'){
+        res.json({error:'Invalid Date'}) 
+      }else{
+        obj = new Date(`${dates}`)
+
+        res.json(
+          {
+            unix: obj.getTime(), 
+            utc: obj.toUTCString()
+          }
+        )
+      }
+    }else{
+       obj = new Date(parseInt(dates))
+       console.log()
+       res.json(
+        {
+          unix: obj.getTime(), 
+          utc: obj.toUTCString()
+        }
+      )
+    }
+   
+});
+
 
 
 
